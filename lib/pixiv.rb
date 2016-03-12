@@ -16,6 +16,7 @@ module Pixiv
   autoload :WorkList,            'pixiv/work_list'
 
   ROOT_URL = 'http://www.pixiv.net'
+  SECURE_ROOT_URL = 'https://www.pixiv.net'
 
   # @deprecated Use {.client} instead. Will be removed in 0.1.0.
   # Delegates to {Pixiv::Client#initialize}
