@@ -54,7 +54,7 @@ module Pixiv
 
     # @param [Integer] member_id
     # @return [Pixiv::Member] member bound to +self+
-    def member(member_id = member_id)
+    def member(member_id)
       attrs = {member_id: member_id}
       member = Member.lazy_new(attrs) { agent.get(Member.url(member_id)) }
       member.bind(self)
