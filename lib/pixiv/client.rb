@@ -1,3 +1,5 @@
+COOKIE_FILE = '/var/tmp/pixiv.cookie'
+
 module Pixiv
   class Client
     # A new agent
@@ -41,6 +43,8 @@ module Pixiv
     # @param [String] pixiv_id
     # @param [String] password
     def login(pixiv_id, password)
+      FileUtils.touch( COOKIE_FILE )
+      agent.cookie_jar.load( COOKIE_FILE )
       doc = agent.get("#{ROOT_URL}/index.php")
       return if doc && doc.body =~ /logout/
       doc = agent.get( "https://accounts.pixiv.net/login" )
@@ -51,6 +55,7 @@ module Pixiv
       doc = agent.submit(form)
       raise Error::LoginFailed unless doc && doc.body =~ /logout/
       @member_id = member_id_from_mypage(doc)
+      agent.cookie_jar.save( COOKIE_FILE )
     end
 
     # @param [Integer] member_id
