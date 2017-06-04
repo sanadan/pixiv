@@ -224,12 +224,15 @@ module Pixiv
 
     def ensure_logged_in
       doc = agent.get("#{ROOT_URL}/mypage.php")
+      while doc.code[/30[12]/]
+        doc = agent.get doc.header['location']
+      end
       raise Error::LoginFailed unless doc.body =~ /logout/
       @member_id = member_id_from_mypage(doc)
     end
 
     def member_id_from_mypage(doc)
-      doc.at('a.user-link')['href'][/\d+$/].to_i
+      doc.at('a.user-name')['href'][/\d+$/].to_i
     end
   end
 
